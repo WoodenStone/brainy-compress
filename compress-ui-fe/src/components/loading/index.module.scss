@@ -1,0 +1,90 @@
+/** @format */
+
+//  css var width
+:root {
+  --offset: 0.5rem;
+}
+
+.shapeOne {
+  background-color: #1875e5;
+  left: -var(--offset);
+  animation: animationShape1 1.5s ease infinite 0.25s;
+}
+
+.shapeTwo {
+  background-color: #c5523f;
+  left: 0;
+  animation: animationShape2 1.5s ease infinite 0.5s;
+}
+
+.shapeThree {
+  background-color: #499255;
+  left: var(--offset);
+  animation: animationShape3 1.5s ease infinite 0.75s;
+}
+
+.shapeFour {
+  background-color: #f2b736;
+  left: calc(var(--offset) * 2);
+  animation: animationShape4 1.5s ease infinite 1s;
+}
+
+@keyframes animationShape1 {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes animationShape2 {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes animationShape3 {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes animationShape4 {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

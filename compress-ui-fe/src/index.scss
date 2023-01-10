@@ -1,0 +1,38 @@
+/** @format */
+
+@import-normalize;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+// 重设滚动条
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #607d8b;
+}
+
+::-webkit-scrollbar-button {
+  width: 2px;
+  height: 2px;
+  background: #607d8b;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}

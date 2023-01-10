@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# see: https://github.com/okonet/lint-staged/issues/1164
+exec >/dev/tty 2>&1
+FORCE_COLOR=0 npx lint-staged 
