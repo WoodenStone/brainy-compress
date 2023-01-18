@@ -63,8 +63,7 @@ export default function CheckboxList({ title, models, onChange }: ICheckboxListP
               <DoneAllIcon />
             </IconButton>
           )
-        }
-      >
+        }>
         <Typography variant="overline" fontSize="1rem">
           {title}
         </Typography>

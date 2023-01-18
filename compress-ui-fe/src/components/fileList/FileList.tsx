@@ -26,8 +26,7 @@ export function FileList({ files, remove, reset }: IFileListProps) {
           <IconButton edge="end" aria-label="reset" color="primary" size="small" onClick={reset}>
             <DeleteSweepIcon />
           </IconButton>
-        }
-      >
+        }>
         <Typography variant="overline" fontSize="1rem">
           Files
         </Typography>

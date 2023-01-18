@@ -16,8 +16,7 @@ export function Loading() {
     <Box
       sx={{
         display: 'block',
-      }}
-    >
+      }}>
       <Grid container spacing={5} justifyContent="center" className="loading">
         {['One', 'Two', 'Three', 'Four'].map((key, index) => (
           <Grid
@@ -26,8 +25,7 @@ export function Loading() {
             className={shapeAnimation[key]}
             sx={{
               margin: '0 0.7rem',
-            }}
-          ></Grid>
+            }}></Grid>
         ))}
       </Grid>
     </Box>
