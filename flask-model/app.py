@@ -1,6 +1,7 @@
 import io
 import json
 import math
+import os
 import time
 
 import torch
@@ -14,6 +15,9 @@ from pytorch_msssim import ms_ssim
 from torchvision import transforms
 
 app = Flask(__name__)
+
+HOST = os.getenv('HOST_IP', '0.0.0.0')
+PORT = os.getenv('PORT', 5000)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 metric = 'mse'  # only pre-trained model for mse are available for now
@@ -134,14 +138,16 @@ def compress():
 
     compressed_img = get_image_from_output(outputs)
     # resize the image to the original size
-    compressed_img = compressed_img.resize((img_converted_rgb.size[0], img_converted_rgb.size[1]))
+    compressed_img = compressed_img.resize(
+        (img_converted_rgb.size[0], img_converted_rgb.size[1]))
 
     # convert the image to byte array
     img_format = format_dict[img_type] if img_type in format_dict else 'JPEG'
     img_bytes = image_to_byte_array(compressed_img, img_format)
 
     compressed_img_size = len(img_bytes)
-    compressed_ratio = "{:.2f}%".format(100 - compressed_img_size / original_img_size * 100)
+    compressed_ratio = "{:.2f}%".format(
+        100 - compressed_img_size / original_img_size * 100)
 
     metrics = calculate_metrics(
         img_converted,
@@ -153,10 +159,12 @@ def compress():
     )
 
     # return the image as file with metrics in the header
-    response = make_response(send_file(io.BytesIO(img_bytes), mimetype=img_type))
+    response = make_response(
+        send_file(io.BytesIO(img_bytes), mimetype=img_type))
     response.headers['X-metrics'] = json.dumps(metrics)
     return response
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 5000)
+    from waitress import serve
+    serve(app, host=HOST, port=PORT)
