@@ -14,3 +14,13 @@ npm i
 # start development server
 npm start
 ```
+
+
+```sh
+# build docker image
+docker build -t react-ng .
+
+# run docker image
+docker run -p 3000:80 --name react-ng react-ng
+
+```
