@@ -1,3 +1,3 @@
 /** @format */
 
-export * from './fileHandler'
+export * from './compress'

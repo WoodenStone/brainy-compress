@@ -1,23 +1,6 @@
 /** @format */
 
-import axios from 'axios'
-
-const instance = axios.create({})
-
-export async function fileHandler(file: Blob, fileName: string) {
-  let formData = new FormData()
-  formData.append('title', fileName)
-  formData.append('f1', file)
-
-  try {
-    const data = await instance.post('/upload', formData, {
-      responseType: 'blob',
-    })
-    return data
-  } catch (error) {
-    return error
-  }
-}
+import { getInstance } from './axios-instance'
 
 export interface IImageCompressRequest {
   file: Blob
@@ -39,7 +22,7 @@ export async function compressImage(options: IImageCompressRequest): Promise<IIm
   formData.append('filetype', fileType)
   formData.append('file', file)
 
-  const resp = await instance.post('/api/compress', formData, {
+  const resp = await getInstance().post('/api/compress', formData, {
     responseType: 'blob',
   })
   const metrics = JSON.parse(resp.headers['x-metrics'])
