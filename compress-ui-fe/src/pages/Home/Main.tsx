@@ -160,7 +160,16 @@ function Main() {
         />
       </Grid>
       {/* 模型选择和文件列表部分，一行两列，响应式，小尺寸时一行一列 */}
-      <Grid item container columns={{ xs: 1, md: 2 }} justifyContent="space-evenly" alignItems="flex-start" spacing={2}>
+      <Grid
+        item
+        container
+        columns={{ xs: 1, md: 2 }}
+        justifyContent="space-evenly"
+        alignItems="flex-start"
+        spacing={{
+          xs: 2,
+          md: 6,
+        }}>
         <Grid item xs={1} sm={1}>
           <CheckboxList title="Select Models" models={models} onChange={useHandleSelectedModels} />
           <Tooltip title="start compressing">

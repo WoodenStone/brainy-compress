@@ -6,6 +6,7 @@
     "dependencies": {
         "@emotion/react": "^11.10.4",
         "@emotion/styled": "^11.10.4",
+        "@fontsource/nunito-sans": "^4.5.10",
         "@mui/icons-material": "^5.10.3",
         "@mui/lab": "^5.0.0-alpha.104",
         "@mui/material": "^5.10.4",

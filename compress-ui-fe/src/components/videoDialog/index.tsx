@@ -45,8 +45,7 @@ function VideoDialogTitle(props: IDialogTitleProps) {
             right: 8,
             top: 8,
             color: theme => theme.palette.grey[500],
-          }}
-        >
+          }}>
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -67,8 +66,7 @@ function VideoDialog(props: IVideoDialogProps) {
       sx={{
         width: '80%',
         margin: 'auto',
-      }}
-    >
+      }}>
       <VideoDialogTitle id="customized-dialog-title" onClose={onClose}>
         {children}
         {videoProps.videoName}

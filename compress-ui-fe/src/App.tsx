@@ -1,5 +1,6 @@
 /** @format */
 import './App.scss'
+import '@fontsource/nunito-sans'
 
 import { PaletteMode } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -9,7 +10,6 @@ import React from 'react'
 
 import Home from './pages/Home'
 import { ColorMode, ColorModeContext, getDesignTokens } from './themes/ThemeToggler'
-
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>(ColorMode.Light)
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode])
@@ -29,7 +29,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <div className="App">
             <CssBaseline />
-            <Home></Home>
+            <Home />
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>

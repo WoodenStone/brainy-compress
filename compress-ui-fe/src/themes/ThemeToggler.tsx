@@ -1,5 +1,7 @@
 /** @format */
 
+import '@fontsource/nunito-sans'
+
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import { IconButton, PaletteMode } from '@mui/material'
@@ -13,22 +15,22 @@ export const enum ColorMode {
 
 export const ColorModeContext = React.createContext({ theme: ColorMode.Light, toggleColorMode: () => {} })
 export const getDesignTokens = (mode: PaletteMode) => ({
+  typography: {
+    fontFamily: [
+      'Nunito Sans',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
   palette: {
     mode,
-    typography: {
-      fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-    },
     ...(mode === 'light'
       ? {
           primary: indigo,
