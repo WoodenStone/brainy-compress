@@ -17,6 +17,5 @@ python app.py
 ```sh
 docker build -t flask .
 
-# pre-trained models will be downloaded automatically (prod mode)
 docker run -it -p 5000:5000 --name flask flask
-
+```
