@@ -99,7 +99,6 @@ def compress():
     img_type = request.form['filetype']
     req_metric = request.form['metric']
     req_quality = request.form['quality']
-    print(f"model: {model}, img_type: {img_type}, req_metric: {req_metric}, req_quality: {req_quality}")
 
     raw_img = Image.open(img.stream)
     original_img_size = len(raw_img.tobytes())
