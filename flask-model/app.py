@@ -19,9 +19,6 @@ HOST = os.getenv('HOST_IP', '0.0.0.0')
 PORT = os.getenv('PORT', 5000)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-metric = 'mse'  # only pre-trained model for mse are available for now
-# lower quality -> lower bit-rate (use lower quality to clearly see visual differences in the notebook)
-quality = 1
 
 format_dict = {
     'image/jpeg': 'JPEG',
@@ -33,13 +30,17 @@ format_dict = {
 }
 
 networks = {
-    'bmshj2018-factorized': bmshj2018_factorized(quality=quality, pretrained=True).eval().to(device),
-    'bmshj2018-hyperprior': bmshj2018_hyperprior(quality=quality, pretrained=True).eval().to(device),
-    'mbt2018-mean': mbt2018_mean(quality=quality, pretrained=True).eval().to(device),
-    'mbt2018': mbt2018(quality=quality, pretrained=True).eval().to(device),
-    'cheng2020-anchor': cheng2020_anchor(quality=quality, pretrained=True).eval().to(device),
-    'cheng2020-attn': cheng2020_attn(quality=quality, pretrained=True).eval().to(device),
+    'bmshj2018-factorized': bmshj2018_factorized,
+    'bmshj2018-hyperprior': bmshj2018_hyperprior,
+    'mbt2018-mean': mbt2018_mean,
+    'mbt2018': mbt2018,
+    'cheng2020-anchor': cheng2020_anchor,
+    'cheng2020-attn': cheng2020_attn,
 }
+
+
+def get_network(model: str, quality: int, metric: str):
+    return networks[model](quality=quality, metric=metric, pretrained=True).eval().to(device)
 
 
 def find_resize_hw(original_h, original_w, factor_h=128, factor_w=128):
@@ -96,6 +97,9 @@ def compress():
     img = request.files['file']
     model = request.form['model']
     img_type = request.form['filetype']
+    req_metric = request.form['metric']
+    req_quality = request.form['quality']
+    print(f"model: {model}, img_type: {img_type}, req_metric: {req_metric}, req_quality: {req_quality}")
 
     raw_img = Image.open(img.stream)
     original_img_size = len(raw_img.tobytes())
@@ -103,8 +107,9 @@ def compress():
     # resize the image to the nearest multiple of 128
     img_resized = preprocess_img(raw_img)
 
+    network = get_network(model, int(req_quality), req_metric)
     # start the compression
-    img_compressor = ImageCompressor(networks[model], img_resized)
+    img_compressor = ImageCompressor(network, img_resized)
     # 1. convert image to tensor
     img_compressor.image_to_tensor()
     # 2. run the specific model

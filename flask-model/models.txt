@@ -1,6 +1,9 @@
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-1-446d5c7f.pth.tar
+https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-8-5232faa3.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-hyperprior-1-7eb97409.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/mbt2018-mean-1-e522738d.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/mbt2018-1-3f36cd77.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/cheng2020-anchor-1-dad2ebff.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/cheng2020_attn-mse-1-465f2b64.pth.tar
+https://compressai.s3.amazonaws.com/models/v1/cheng2020_attn-ms-ssim-1-c5381d91.pth.tar
+https://compressai.s3.amazonaws.com/models/v1/cheng2020_attn-mse-6-730501f2.pth.tar
