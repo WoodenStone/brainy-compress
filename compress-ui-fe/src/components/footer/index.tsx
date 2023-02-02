@@ -8,8 +8,7 @@ function Footer() {
         width: '100%',
         textAlign: 'center',
         backgroundColor: 'primary',
-      }}
-    >
+      }}>
       {/* <Typography variant="overline">WoodenStone@github 2022</Typography> */}
     </Box>
   )
