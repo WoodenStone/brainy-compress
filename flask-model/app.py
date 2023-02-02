@@ -9,8 +9,7 @@ from PIL import Image
 from compressai.zoo import (
     bmshj2018_factorized, bmshj2018_hyperprior, mbt2018_mean, mbt2018, cheng2020_anchor, cheng2020_attn
 )
-from flask import Flask, send_file
-from flask import request, make_response
+from flask import Flask, send_file, request, make_response
 from pytorch_msssim import ms_ssim
 from torchvision import transforms
 
@@ -55,24 +54,6 @@ def find_resize_hw(original_h, original_w, factor_h=128, factor_w=128):
     return h, w
 
 
-def run_network(network, img):
-    """
-    run the specified network on the image
-    :param network:
-    :param img:
-    :return:
-    """
-    with torch.no_grad():
-        out_net = network(img)
-    out_net['x_hat'].clamp_(0, 1)
-    return out_net
-
-
-def get_image_from_output(output) -> Image:
-    img = transforms.ToPILImage()(output['x_hat'].squeeze())
-    return img
-
-
 def image_to_byte_array(image: Image, image_format: str) -> bytes:
     """
     convert PIL image to byte array
@@ -102,14 +83,11 @@ def compute_bpp(out_net):
                for likelihoods in out_net['likelihoods'].values()).item()
 
 
-def calculate_metrics(img: Image, outputs, **kwargs):
-    metrics = {
-        "PSNR": "{:.4f}dB".format(compute_psnr(img, outputs['x_hat'])),
-        "MS-SSIM": "{:.4f}".format(compute_msssim(img, outputs['x_hat'])),
-        "Bit-rate": "{:.4f}bpp".format(compute_bpp(outputs)),
-    }
-    metrics.update(kwargs)
-    return metrics
+def preprocess_img(img: Image) -> Image:
+    img_rgb = img.convert('RGB')
+    h, w = find_resize_hw(img.size[0], img.size[1])
+    img_resized = img_rgb.resize((h, w))
+    return img_resized
 
 
 @app.route('/compress', methods=['POST'])
@@ -122,24 +100,25 @@ def compress():
     raw_img = Image.open(img.stream)
     original_img_size = len(raw_img.tobytes())
 
-    # convert img from file to tensor
-    img_converted_rgb = raw_img.convert('RGB')
-
     # resize the image to the nearest multiple of 128
-    h, w = find_resize_hw(img_converted_rgb.size[0], img_converted_rgb.size[1])
-    img_resized = img_converted_rgb.resize((h, w))
+    img_resized = preprocess_img(raw_img)
 
-    img_converted = transforms.ToTensor()(img_resized).unsqueeze(0).to(device)
-
-    # run the specific model
+    # start the compression
+    img_compressor = ImageCompressor(networks[model], img_resized)
+    # 1. convert image to tensor
+    img_compressor.image_to_tensor()
+    # 2. run the specific model
     start_time = time.time()
-    outputs = run_network(networks[model], img_converted)
+    img_compressor.run()
     time_cost = time.time() - start_time
+    # 3. get the compressed image
+    compressed_img = img_compressor.tensor_to_image()
+    # 4. get the metrics
+    compression_metrics = img_compressor.calculate_metrics()
 
-    compressed_img = get_image_from_output(outputs)
     # resize the image to the original size
     compressed_img = compressed_img.resize(
-        (img_converted_rgb.size[0], img_converted_rgb.size[1]))
+        (raw_img.size[0], raw_img.size[1]))
 
     # convert the image to byte array
     img_format = format_dict[img_type] if img_type in format_dict else 'JPEG'
@@ -149,14 +128,13 @@ def compress():
     compressed_ratio = "{:.2f}%".format(
         100 - compressed_img_size / original_img_size * 100)
 
-    metrics = calculate_metrics(
-        img_converted,
-        outputs,
-        time_cost=f"{time_cost:.2f}s",
-        compressed_ratio=compressed_ratio,
-        original_size=f"{original_img_size / 1024:.2f}KB",
-        compressed_size=f"{compressed_img_size / 1024:.2f}KB",
-    )
+    metrics = {
+        "time_cost": f"{time_cost:.2f}s",
+        "compressed_ratio": compressed_ratio,
+        "original_size": f"{original_img_size / 1024:.2f}KB",
+        "compressed_size": f"{compressed_img_size / 1024:.2f}KB",
+    }
+    metrics.update(compression_metrics)
 
     # return the image as file with metrics in the header
     response = make_response(
@@ -165,6 +143,39 @@ def compress():
     return response
 
 
+class ImageCompressor:
+    def __init__(self, model, image: Image) -> None:
+        self.model = model
+        self.image = image
+        self.out_net = None
+        self.image_tensor = None
+
+    def image_to_tensor(self):
+        self.image_tensor = transforms.ToTensor()(self.image).unsqueeze(0).to(device)
+
+    def tensor_to_image(self):
+        return transforms.ToPILImage()(
+            self.out_net['x_hat'].squeeze())
+
+    def run(self):
+        self.image_to_tensor()
+        with torch.no_grad():
+            out_net = self.model(self.image_tensor)
+        out_net['x_hat'].clamp_(0, 1)
+        self.out_net = out_net
+        self.tensor_to_image()
+        return out_net
+
+    def calculate_metrics(self):
+        metrics = {
+            "PSNR": "{:.4f}dB".format(compute_psnr(self.image_tensor, self.out_net['x_hat'])),
+            "MS-SSIM": "{:.4f}".format(compute_msssim(self.image_tensor, self.out_net['x_hat'])),
+            "Bit-rate": "{:.4f}bpp".format(compute_bpp(self.out_net)),
+        }
+        return metrics
+
+
 if __name__ == '__main__':
     from waitress import serve
+
     serve(app, host=HOST, port=PORT)
