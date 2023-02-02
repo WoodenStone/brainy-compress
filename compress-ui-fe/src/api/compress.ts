@@ -7,6 +7,8 @@ export interface IImageCompressRequest {
   fileName: string
   fileType: string // eg: image/jpeg
   model: string // model name, eg: 'mbt2018'
+  metric: 'mse' | 'ms-ssim'
+  quality: number
 }
 
 export interface IImageCompressResponse {
@@ -15,12 +17,19 @@ export interface IImageCompressResponse {
 }
 
 export async function compressImage(options: IImageCompressRequest): Promise<IImageCompressResponse> {
-  const { file, fileName, fileType, model } = options
+  const { file, fileName, fileType, model, metric, quality } = options
+  const reqData = {
+    filename: fileName,
+    model,
+    filetype: fileType,
+    metric,
+    quality: quality.toString(),
+    file,
+  }
   let formData = new FormData()
-  formData.append('filename', fileName)
-  formData.append('model', model)
-  formData.append('filetype', fileType)
-  formData.append('file', file)
+  Object.entries(reqData).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
 
   const resp = await getInstance().post('/api/compress', formData, {
     responseType: 'blob',

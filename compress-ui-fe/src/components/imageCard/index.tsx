@@ -24,6 +24,8 @@ export interface IImageCardProps {
   model: string
   fileType: string
   originalImgSrc: string
+  reqMetric: string
+  reqQuality: number
 }
 
 interface TabPanelProps {
@@ -53,7 +55,15 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model }: IImageCardProps) {
+export function ImageCard({
+  imageSrc,
+  imageName,
+  metrics,
+  originalImgSrc,
+  model,
+  reqMetric,
+  reqQuality,
+}: IImageCardProps) {
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -75,18 +85,26 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'hidden',
       }}>
-      <Tooltip title="download compressed image">
-        <Button size="small" fullWidth onClick={handleDownloadImg}>
-          <Typography
-            variant="overline"
-            sx={{
-              fontSize: '1rem',
-            }}>
-            {model}
-          </Typography>
-        </Button>
-      </Tooltip>
+      <Box
+        sx={{
+          width: '100%',
+          maxHeight: '3rem',
+        }}>
+        <Tooltip title="download compressed image">
+          <Button size="small" fullWidth onClick={handleDownloadImg}>
+            <Typography
+              variant="overline"
+              sx={{
+                fontSize: '1rem',
+              }}>
+              {model}
+            </Typography>
+          </Button>
+        </Tooltip>
+        <Typography align="center">{`metric: ${reqMetric} | quality: ${reqQuality}`}</Typography>
+      </Box>
       <Divider></Divider>
 
       <Tabs
@@ -99,6 +117,7 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
           position: 'absolute',
           bottom: '0',
           margin: 'auto',
+          zIndex: 1,
         }}>
         <Tooltip title="compressed image">
           <Tab icon={<PhotoFilterOutlinedIcon />} aria-label="compressed Image" />
@@ -110,6 +129,7 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
           <Tab icon={<CompareOutlinedIcon />} aria-label="compare with the original one" />
         </Tooltip>
       </Tabs>
+
       {/* 压缩后的图片 */}
       <TabPanel
         value={value}
@@ -122,6 +142,9 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
         }}>
         <Box
           sx={{
+            xs: {
+              width: '30vw',
+            },
             width: '25vw',
             height: '35vh',
           }}>
@@ -191,8 +214,12 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
         value={value}
         index={2}
         sx={{
+          xs: {
+            width: '60vw',
+            height: '40vh',
+          },
           width: '20vw',
-          height: '15vh',
+          height: '20vh',
           display: 'flex',
           justifyContent: 'center',
           position: 'absolute',
@@ -200,8 +227,12 @@ export function ImageCard({ imageSrc, imageName, metrics, originalImgSrc, model 
         }}>
         <Box
           sx={{
+            xs: {
+              width: '60vw',
+              height: '40vh',
+            },
             width: '20vw',
-            height: '15vh',
+            height: '20vh',
           }}>
           <ReactCompareImage
             rightImage={imageSrc}

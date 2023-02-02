@@ -11,25 +11,74 @@ import Tooltip from '@mui/material/Tooltip'
 import { useState } from 'react'
 
 import { compressImage, IImageCompressRequest } from '../../api'
-import CheckboxList from '../../components/checkbox'
+import CheckboxList, { IModel, IModelChecked } from '../../components/checkbox'
 import { FileList } from '../../components/fileList/FileList'
 import FileUploader from '../../components/fileUploader'
 import { ImageCard } from '../../components/imageCard'
 import { Loading } from '../../components/loading'
 import { useNotification } from '../../components/notification'
 import { createDownloadLink } from '../../utils/download'
+
 const acceptFileTypes = {
   'image/jpeg': ['.jpeg', '.jpg'],
   'image/png': ['.png'],
 }
 
-const models = [
-  'bmshj2018-factorized',
-  'bmshj2018-hyperprior',
-  'mbt2018',
-  'mbt2018-mean',
-  'cheng2020-anchor',
-  'cheng2020-attn',
+const modelList: IModel[] = [
+  {
+    name: 'bmshj2018-factorized',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(8).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Variational image compression with a scale hyperprior',
+    paperLink: 'https://arxiv.org/abs/1802.01436',
+  },
+  {
+    name: 'bmshj2018-hyperprior',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(8).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Variational image compression with a scale hyperprior',
+    paperLink: 'https://arxiv.org/abs/1802.01436',
+  },
+  {
+    name: 'mbt2018-mean',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(8).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Joint Autoregressive and Hierarchical Priors for Learned Image Compression',
+    paperLink: 'https://arxiv.org/abs/1809.02736',
+  },
+  {
+    name: 'mbt2018',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(8).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Joint Autoregressive and Hierarchical Priors for Learned Image Compression',
+    paperLink: 'https://arxiv.org/abs/1809.02736',
+  },
+  {
+    name: 'cheng2020-anchor',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(6).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Learned Image Compression with Discretized Gaussian Mixture Likelihoods and Attention Modules',
+    paperLink: 'https://arxiv.org/abs/2001.01568',
+  },
+  {
+    name: 'cheng2020-attn',
+    metric: ['mse', 'ms-ssim'],
+    quality: [...Array(6).keys()].map(x => ++x),
+    selectedMetric: 'mse',
+    selectedQuality: 1,
+    paperName: 'Learned Image Compression with Discretized Gaussian Mixture Likelihoods and Attention Modules',
+    paperLink: 'https://arxiv.org/abs/2001.01568',
+  },
 ]
 
 interface ICompressResult {
@@ -39,11 +88,13 @@ interface ICompressResult {
   fileName: string
   fileType: string
   model: string
+  reqMetric: string
+  reqQuality: number
 }
 
 async function compressOneImage(params: IImageCompressRequest): Promise<ICompressResult> {
   const res = await compressImage(params)
-  const { fileName, fileType, file, model } = params
+  const { fileName, fileType, file, model, metric, quality } = params
   const result = {
     compressedImg: new Blob([res?.data], { type: fileType }),
     metrics: res?.metrics,
@@ -51,6 +102,8 @@ async function compressOneImage(params: IImageCompressRequest): Promise<ICompres
     fileName: fileName,
     fileType: fileType,
     model,
+    reqMetric: metric,
+    reqQuality: quality,
   }
   return result
 }
@@ -71,7 +124,7 @@ function Main() {
   const { notice } = useNotification()
 
   const [files, setFiles] = useState<File[]>([])
-  const [selectedModels, setSelectedModels] = useState<string[]>([])
+  const [selectedModels, setSelectedModels] = useState<IModelChecked[]>([])
   const [compressedResult, setCompressedResult] = useState<ICompressResult[][]>([])
   const [isCompressing, setIsCompressing] = useState<boolean>(false)
 
@@ -85,7 +138,7 @@ function Main() {
     setFiles([])
   }
 
-  const useHandleSelectedModels = (selected: string[]) => {
+  const useHandleSelectedModels = (selected: IModelChecked[]) => {
     setSelectedModels(selected)
   }
 
@@ -131,7 +184,9 @@ function Main() {
                 file,
                 fileName: file.name,
                 fileType: file.type,
-                model,
+                model: model.name,
+                quality: model.quality,
+                metric: model.metric as 'mse' | 'ms-ssim',
               }),
             ),
           ),
@@ -171,7 +226,7 @@ function Main() {
           md: 6,
         }}>
         <Grid item xs={1} sm={1}>
-          <CheckboxList title="Select Models" models={models} onChange={useHandleSelectedModels} />
+          <CheckboxList title="Select Models" modelList={modelList} onChange={useHandleSelectedModels} />
           <Tooltip title="start compressing">
             <Button
               startIcon={<CompressOutlinedIcon />}
@@ -219,11 +274,26 @@ function Main() {
                 columnSpacing={2}
                 spacing={2}>
                 {imageResult.map((item: ICompressResult) => {
-                  const { compressedImg, metrics, originalImg, fileName, fileType, model } = item
+                  const {
+                    compressedImg,
+                    metrics,
+                    originalImg,
+                    fileName,
+                    fileType,
+                    model,
+                    reqMetric: metric,
+                    reqQuality: quality,
+                  } = item
                   const compressedImgUrl = URL.createObjectURL(compressedImg)
                   const originalImgUrl = URL.createObjectURL(originalImg)
                   return (
-                    <Grid item xs={1} sm={1} width="33vw" height={'50vh'} key={`${fileName}-${model}`}>
+                    <Grid
+                      item
+                      xs={1}
+                      sm={1}
+                      width="33vw"
+                      height={'50vh'}
+                      key={`${fileName}-${model}-${quality}-${metric}`}>
                       {/* 压缩结果的卡片 */}
                       <ImageCard
                         imageName={fileName}
@@ -232,6 +302,8 @@ function Main() {
                         model={model}
                         fileType={fileType}
                         originalImgSrc={originalImgUrl}
+                        reqMetric={metric}
+                        reqQuality={quality}
                       />
                     </Grid>
                   )
@@ -241,10 +313,10 @@ function Main() {
           )
         })}
       {compressedResult?.length > 0 && (
-        <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
+        <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', top: '95vh', right: '5vw' }}>
           <SpeedDial
             ariaLabel="Actions"
-            sx={{ position: 'absolute', bottom: '1rem', right: -100 }}
+            sx={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
             icon={<SpeedDialIcon />}>
             {actions.map(action => (
               <SpeedDialAction
