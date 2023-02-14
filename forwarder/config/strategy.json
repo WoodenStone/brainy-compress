@@ -1,0 +1,45 @@
+{
+  "qualityMap": {
+    "high": {
+      "bmshj2018-factorized": 8,
+      "bmshj2018-hyperprior": 8,
+      "mbt2018-mean": 8,
+      "mbt2018": 8,
+      "cheng2020-anchor": 6,
+      "cheng2020-attn": 6
+    },
+    "medium": {
+      "bmshj2018-factorized": 6,
+      "bmshj2018-hyperprior": 6,
+      "mbt2018-mean": 6,
+      "mbt2018": 6,
+      "cheng2020-anchor": 5,
+      "cheng2020-attn": 5
+    },
+    "low": {
+      "bmshj2018-factorized": 4,
+      "bmshj2018-hyperprior": 4,
+      "mbt2018-mean": 4,
+      "mbt2018": 4,
+      "cheng2020-anchor": 3,
+      "cheng2020-attn": 3
+    }
+  },
+  "compressionStrategy": {
+    "simple": {
+      "mse": "cheng2020-anchor",
+      "ms-ssim": "cheng2020-anchor",
+      "qualityLabel": "low"
+    },
+    "textured": {
+      "mse": "cheng2020-attn",
+      "ms-ssim": "cheng2020-attn",
+      "qualityLabel": "medium"
+    },
+    "complex": {
+      "mse": "cheng2020-attn",
+      "ms-ssim": "cheng2020-anchor",
+      "qualityLabel": "high"
+    }
+  }
+}
