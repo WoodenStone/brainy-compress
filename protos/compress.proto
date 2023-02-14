@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package compress_model;
+
+option go_package = "./model";
+
+message CompressOneFileRequest {
+  string file_id = 1;
+  string file_name = 2;
+  string file_type = 3;
+  string model_name = 4;
+  string metric = 5;
+  int32 quality = 6;
+  string image_classification = 7;
+  bytes file_data = 8;
+}
+
+message CompressOneFileResponse {
+  string file_id = 1;
+  // metrics, KV pairs
+  map<string, string> metrics = 2;
+  // compressed image data
+  bytes compressed_file = 3;
+}
+
+service ImageCompressService {
+  rpc CompressOneImage(CompressOneFileRequest)
+      returns (CompressOneFileResponse) {}
+}

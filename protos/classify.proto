@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package classification_model;
+
+option go_package = "./model";
+
+message ClassifyOneImageRequest {
+  string image_id = 1;
+  string image_name = 2;
+  string image_type = 3;
+  bytes image_data = 4;
+}
+
+message ClassifyOneImageResponse {
+  string image_id = 1;
+  string result = 2;
+  float probability = 3;
+}
+
+service ClassificationService {
+  rpc ClassifyOneImage(ClassifyOneImageRequest)
+      returns (ClassifyOneImageResponse);
+}
