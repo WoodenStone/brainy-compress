@@ -56,7 +56,7 @@ export interface ICheckboxListProps {
   onChange: (selected: IModelChecked[]) => void
 }
 
-export default function CheckboxList({ title, modelList, onChange }: ICheckboxListProps) {
+export default function ModelList({ title, modelList, onChange }: ICheckboxListProps) {
   const [checked, setChecked] = React.useState([-1])
   const [allSelected, setAllSelected] = React.useState(false)
 
@@ -104,7 +104,7 @@ export default function CheckboxList({ title, modelList, onChange }: ICheckboxLi
 
   return (
     <>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <List sx={{ width: '100%', bgcolor: 'background.paper', paddingX: 0 }}>
         <ListItem
           secondaryAction={
             allSelected ? (
@@ -117,9 +117,7 @@ export default function CheckboxList({ title, modelList, onChange }: ICheckboxLi
               </IconButton>
             )
           }>
-          <Typography variant="overline" fontSize="1rem">
-            {title}
-          </Typography>
+          <ListItemText primary={title}></ListItemText>
         </ListItem>
         <Divider />
         {models.map((model, index) => {
@@ -134,7 +132,7 @@ export default function CheckboxList({ title, modelList, onChange }: ICheckboxLi
                   <Tooltip
                     placement="left"
                     title={
-                      <Link href={model.paperLink} underline="always" color="inherit">
+                      <Link href={model.paperLink} underline="always" color="inherit" target="_blank">
                         {model.paperName}
                       </Link>
                     }>

@@ -25,7 +25,7 @@ export interface IImageCardProps {
   fileType: string
   originalImgSrc: string
   reqMetric: string
-  reqQuality: number
+  reqQuality: number | string
 }
 
 interface TabPanelProps {
