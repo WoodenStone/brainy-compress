@@ -29,7 +29,7 @@ func CompressImage(image []byte) {
 
 	compressionClient := model.NewImageCompressServiceClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
 	response, err := compressionClient.CompressOneImage(ctx,

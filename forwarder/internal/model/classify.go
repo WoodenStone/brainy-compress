@@ -18,7 +18,7 @@ type ClassifyRPCResponse struct {
 }
 
 func ClassifyImage(req *ClassifyRPCRequest) (resp *ClassifyRPCResponse, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
 	response, err := modelgrpcclient.ClassifyModelClient.ClassifyOneImage(ctx,

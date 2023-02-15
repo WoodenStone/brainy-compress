@@ -66,15 +66,11 @@ func (app *App) startHttpServer() {
 	addr := fmt.Sprintf("%s:%d", app.Config.HTTP.Addr, app.Config.HTTP.Port)
 
 	app.HTTPServer = &http.Server{
-		Addr:              addr,
-		Handler:           httpapi.GinHandler(app.Config),
-		ReadHeaderTimeout: 3 * time.Second,
-		ReadTimeout:       10 * time.Second,
-		WriteTimeout:      10 * time.Second,
-		IdleTimeout:       65 * time.Second,
-		ErrorLog:          nil,
-		BaseContext:       nil,
-		ConnContext:       nil,
+		Addr:        addr,
+		Handler:     httpapi.GinHandler(app.Config),
+		ErrorLog:    nil,
+		BaseContext: nil,
+		ConnContext: nil,
 	}
 
 	if err := app.HTTPServer.ListenAndServe(); err != http.ErrServerClosed {

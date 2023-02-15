@@ -23,7 +23,7 @@ type CompressRPCResponse struct {
 
 func CompressImage(req *CompressRPCRequest) (resp *CompressRPCResponse, err error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
 	response, err := modelgrpcclient.CompressModelClient.CompressOneImage(ctx,

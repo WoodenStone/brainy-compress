@@ -3,10 +3,7 @@ package modelgrpcclient
 import (
 	"context"
 	model "forwarder/internal/model/protos"
-	"log"
-	"time"
 
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -32,15 +29,9 @@ var (
 
 var modelDialOpts = []grpc.DialOption{
 	grpc.WithTransportCredentials(insecure.NewCredentials()),
-	grpc.WithChainUnaryInterceptor(retry.UnaryClientInterceptor(
-		retry.WithMax(2),
-		retry.WithPerRetryTimeout(time.Second),
-		retry.WithBackoff(retry.BackoffExponentialWithJitter(200*time.Millisecond, 0.2)),
-	)),
 }
 
 func InitCompressModelClient(addr string) (err error) {
-	log.Printf("addr: %s", addr)
 	client, err := NewGRPCClient(addr, modelDialOpts, model.NewImageCompressServiceClient)
 
 	if err != nil {

@@ -16,6 +16,10 @@ func GinHandler(cfg *config.Config) *gin.Engine {
 
 	r.SetTrustedProxies([]string{})
 
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, "running")
+	})
+
 	r.Use(gin.Recovery())
 	r.Use(middleware.Cors())
 
