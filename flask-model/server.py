@@ -11,9 +11,15 @@ from controller import compressor, classifier
 # Coroutines to be invoked when the event loop is shutting down.
 _cleanup_coroutines = []
 
+# set grpc options, increase max size to 100MB
+options = [
+    ('grpc.max_send_message_length', 100 * 1024 * 1024),
+    ('grpc.max_receive_message_length', 100 * 1024 * 1024)
+]
+
 
 async def serve() -> None:
-    server = grpc.aio.server()
+    server = grpc.aio.server(options=options)
     compress_pb2_grpc.add_ImageCompressServiceServicer_to_server(compressor.Compressor(), server)
     classify_pb2_grpc.add_ClassificationServiceServicer_to_server(classifier.Classifier(), server)
     listen_addr = config.listen_addr

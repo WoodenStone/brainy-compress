@@ -13,7 +13,6 @@ class Classifier(classify_pb2_grpc.ClassificationServiceServicer):
         image_data = request.image_data
 
         (class_name, probability) = classify_model.classify_image(image_data)
-        print(f"Class name: {class_name}, probability: {probability}")
 
         result = config.label_map[class_name]
         return classify_pb2.ClassifyOneImageResponse(result=result, probability=probability)

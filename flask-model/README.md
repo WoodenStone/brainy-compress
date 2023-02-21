@@ -5,11 +5,7 @@
 ```sh
 pip install -r requirements.txt
 
-# development mode
-flask run
-
-# or production mode
-python app.py
+python server.py
 ```
 
 ## RUN in docker
