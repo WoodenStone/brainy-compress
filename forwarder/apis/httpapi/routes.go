@@ -21,6 +21,7 @@ func GinHandler(cfg *config.Config) *gin.Engine {
 	})
 
 	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
 	r.Use(middleware.Cors())
 
 	v1 := r.Group("/v1")

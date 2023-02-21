@@ -29,6 +29,9 @@ var (
 
 var modelDialOpts = []grpc.DialOption{
 	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	// set max message size to 100MB
+	grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(100 * 1024 * 1024)),
+	grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(100 * 1024 * 1024)),
 }
 
 func InitCompressModelClient(addr string) (err error) {

@@ -45,6 +45,7 @@ func Setup() {
 	setupConfig()
 
 	startGRPCClients()
+	log.Println("GRPC clients started")
 }
 
 func main() {
