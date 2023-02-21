@@ -15,7 +15,7 @@ import TableRow from '@mui/material/TableRow'
 import React from 'react'
 import ReactCompareImage from 'react-compare-image'
 
-import { createDownloadLink } from '../../utils/download'
+import { createDownloadLink } from '../../utils/utils'
 
 export interface IImageCardProps {
   imageSrc: string
@@ -34,6 +34,40 @@ interface TabPanelProps {
   value: number
   sx?: any
 }
+
+// 表格指标名称转换和单位补全
+const metricTransformer: Record<string, Record<string, string>> = {
+  'Bit-rate': {
+    unit: '',
+    alias: 'Bit-rate',
+  },
+  PSNR: {
+    unit: 'dB',
+    alias: 'PSNR',
+  },
+  'MS-SSIM': {
+    unit: '',
+    alias: 'MS-SSIM',
+  },
+  compressed_size: {
+    unit: 'KB',
+    alias: 'Compressed Size',
+  },
+  original_size: {
+    unit: 'KB',
+    alias: 'Original Size',
+  },
+  compressed_ratio: {
+    unit: '%',
+    alias: 'Compression Ratio',
+  },
+  time_cost: {
+    unit: 's',
+    alias: 'Time Cost',
+  },
+}
+
+const unsupportedFileType = ['image/tiff']
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, sx, ...other } = props
@@ -63,6 +97,7 @@ export function ImageCard({
   model,
   reqMetric,
   reqQuality,
+  fileType,
 }: IImageCardProps) {
   const [value, setValue] = React.useState(0)
 
@@ -148,18 +183,33 @@ export function ImageCard({
             width: '25vw',
             height: '35vh',
           }}>
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundImage: `url(${imageSrc})`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }}></Box>
+          {!unsupportedFileType.includes(fileType) ? (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundImage: `url(${imageSrc})`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+              }}></Box>
+          ) : (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Typography variant="overline" sx={{ fontSize: '0.8rem', color: 'primary' }}>
+                {`Displaying images in format of ${fileType} is not supported. Please download the image to view it.`}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </TabPanel>
       {/* 展示指标的表格 */}
@@ -200,9 +250,9 @@ export function ImageCard({
               {Object.entries(metrics).map(([metric, value]) => (
                 <TableRow key={metric} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {metric}
+                    {metricTransformer[metric]?.alias || metric}
                   </TableCell>
-                  <TableCell align="right">{value}</TableCell>
+                  <TableCell align="right">{value.toString() + metricTransformer[metric]?.unit}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -225,21 +275,36 @@ export function ImageCard({
           position: 'absolute',
           top: '5rem',
         }}>
-        <Box
-          sx={{
-            xs: {
-              width: '60vw',
-              height: '40vh',
-            },
-            width: '20vw',
-            height: '20vh',
-          }}>
-          <ReactCompareImage
-            rightImage={imageSrc}
-            leftImage={originalImgSrc}
-            leftImageLabel="before"
-            rightImageLabel="after"></ReactCompareImage>
-        </Box>
+        {unsupportedFileType.includes(fileType) ? (
+          <Box
+            sx={{
+              xs: {
+                width: '30vw',
+              },
+              width: '25vw',
+              height: '35vh',
+            }}>
+            <Typography variant="overline" sx={{ fontSize: '0.8rem', color: 'primary' }}>
+              {`Displaying images in format of ${fileType} is not supported. Please download the image to view it.`}
+            </Typography>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              xs: {
+                width: '60vw',
+                height: '40vh',
+              },
+              width: '33vw',
+              height: '33vh',
+            }}>
+            <ReactCompareImage
+              rightImage={imageSrc}
+              leftImage={originalImgSrc}
+              leftImageLabel="before"
+              rightImageLabel="after"></ReactCompareImage>
+          </Box>
+        )}
       </TabPanel>
     </Box>
   )

@@ -1,5 +1,6 @@
 /** @format */
 
+import { round } from '../utils/utils'
 import { getInstance } from './axios-instance'
 
 export interface IImageCompressRequest {
@@ -18,6 +19,9 @@ export interface IImageCompressResponse {
 
 export async function compressImage(options: IImageCompressRequest): Promise<IImageCompressResponse> {
   const { file, fileName, fileType, model, metric, quality } = options
+  // log file size
+  console.log('file size: ', file.size)
+
   const reqData = {
     filename: fileName,
     model,
@@ -38,7 +42,14 @@ export async function compressImage(options: IImageCompressRequest): Promise<IIm
   // extract metrics from response header
   const metrics = JSON.parse(resp.headers['x-metrics'])
 
+  // 替换 original size 和 compression ratio
+  const originalSize = round(file.size / 1024, 2)
+  const compressionRatio = round((1 - metrics?.compressed_size / originalSize) * 100, 4)
+  metrics.original_size = originalSize
+  metrics.compressed_ratio = compressionRatio
+
   const respData = resp.data
+  console.log(metrics)
   return {
     data: respData,
     metrics: metrics,

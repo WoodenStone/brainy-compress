@@ -19,11 +19,14 @@ import { Loading } from '../../components/loading'
 import ModelList, { IModel, IModelChecked } from '../../components/modelList'
 import { AutoModelList, IAutoModelSelected } from '../../components/modelList/automatic'
 import { useNotification } from '../../components/notification'
-import { createDownloadLink } from '../../utils/download'
+import { createDownloadLink } from '../../utils/utils'
 
 const acceptFileTypes = {
   'image/jpeg': ['.jpeg', '.jpg'],
   'image/png': ['.png'],
+  'image/tiff': ['.tiff', '.tif'],
+  'image/webp': ['.webp'],
+  'image/bmp': ['.bmp'],
 }
 
 const modelList: IModel[] = [
@@ -397,6 +400,7 @@ function Main() {
                     reqMetric: metric,
                     reqQuality: quality,
                   } = item
+                  console.log('filetype', fileType)
                   const compressedImgUrl = URL.createObjectURL(compressedImg)
                   const originalImgUrl = URL.createObjectURL(originalImg)
                   return (

@@ -9,3 +9,8 @@ export function createDownloadLink(url: string, filename: string) {
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
 }
+
+// 保留指定位数的小数
+export function round(num: number, precision: number) {
+  return Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)
+}

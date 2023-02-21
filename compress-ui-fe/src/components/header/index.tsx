@@ -6,7 +6,11 @@ import ThemeToggler from '../../themes/ThemeToggler'
 
 function Header() {
   return (
-    <AppBar component="nav">
+    <AppBar
+      component="nav"
+      sx={{
+        boxShadow: 'none',
+      }}>
       <Toolbar sx={{ height: '10vh' }}>
         <Typography variant="h1" sx={{ flexGrow: 1, display: 'block', fontSize: '2rem' }}>
           Compress AI - Demo
