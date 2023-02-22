@@ -1,7 +1,8 @@
 /** @format */
 
-import { AppBar, Box, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Toolbar } from '@mui/material'
 
+import image from '../../brainy.png'
 import ThemeToggler from '../../themes/ThemeToggler'
 
 function Header() {
@@ -11,13 +12,16 @@ function Header() {
       sx={{
         boxShadow: 'none',
       }}>
-      <Toolbar sx={{ height: '10vh' }}>
-        <Typography variant="h1" sx={{ flexGrow: 1, display: 'block', fontSize: '2rem' }}>
-          Compress AI - Demo
-          {/* <Typography variant="caption" component="div">
-            Online Movie Restoration Platform
-          </Typography> */}
-        </Typography>
+      <Toolbar sx={{ height: '80px', display: 'flex' }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            marginTop: '10px',
+            display: 'flex',
+            alignItems: 'center',
+          }}>
+          <img src={image} width="300px" height="75px" alt="compression"></img>
+        </Box>
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
           <ThemeToggler />
         </Box>

@@ -295,8 +295,8 @@ export function ImageCard({
                 width: '60vw',
                 height: '40vh',
               },
-              width: '33vw',
-              height: '33vh',
+              width: '19vw',
+              height: '19vh',
             }}>
             <ReactCompareImage
               rightImage={imageSrc}
