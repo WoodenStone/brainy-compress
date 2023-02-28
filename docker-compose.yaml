@@ -7,7 +7,7 @@ services:
     container_name: fe
     image: react-prod:latest
     build:
-      context: ./compress-ui-fe
+      context: ./frontend
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production

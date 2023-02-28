@@ -1,5 +1,5 @@
 {
-  "name": "compress-ui-fe",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "author": "woodenstone@github",
@@ -23,7 +23,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "prepare": "cd .. && husky install ./compress-ui-fe/.husky",
+    "prepare": "cd .. && husky install ./frontend/.husky",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

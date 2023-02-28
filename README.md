@@ -12,7 +12,7 @@ docker-compose up -d
 
 Check README.md in each folder for more details.
 
-client: [README.md](./compress-ui-fe/README.md)
+client: [README.md](./frontend/README.md)
 
 server: [README.md](./flask-model/README.md)
 
