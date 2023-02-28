@@ -400,7 +400,7 @@ function Main() {
                     reqMetric: metric,
                     reqQuality: quality,
                   } = item
-                  console.log('filetype', fileType)
+
                   const compressedImgUrl = URL.createObjectURL(compressedImg)
                   const originalImgUrl = URL.createObjectURL(originalImg)
                   return (

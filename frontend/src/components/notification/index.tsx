@@ -1,7 +1,7 @@
 /** @format */
 import { useSnackbar, VariantType } from 'notistack'
 
-export const useNotification = (duration = 1500, horizontal = 'right', vertical = 'top') => {
+export const useNotification = (duration = 3000, horizontal = 'right', vertical = 'top') => {
   const { enqueueSnackbar } = useSnackbar()
 
   const notice = (message: string, variant: VariantType) => {

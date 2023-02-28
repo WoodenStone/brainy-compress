@@ -18,9 +18,9 @@ npm start
 
 ```sh
 # build docker image
-docker build -t react-prod .
+docker build -t frontend .
 
 # run docker image
-docker run -p 3000:80 --name react-prod react-prod
+docker run -p 3000:80 frontend
 
 ```

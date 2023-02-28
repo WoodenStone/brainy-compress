@@ -19,7 +19,10 @@ def get_model():
     model = models.resnet18(weights=None)
     num_fits = model.fc.in_features
     model.fc = nn.Linear(num_fits, config.num_classes)
-    model.load_state_dict(torch.load(config.model_path)['net'])
+    if torch.cuda.is_available():
+        model.load_state_dict(torch.load(config.model_path)['net'])
+    else:
+        model.load_state_dict(torch.load(config.model_path, map_location=torch.device('cpu'))['net'])
     model.to(config.device)
     model.eval()
     return model

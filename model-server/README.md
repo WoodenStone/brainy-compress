@@ -11,7 +11,7 @@ python server.py
 ## RUN in docker
 
 ```sh
-docker build -t flask .
+docker build -t model-server .
 
-docker run -it -p 5000:5000 --name flask flask
+docker run -it -p 50051:50051 -v ${PWD}/pretrained-model:/app/pretrained-model model-server
 ```
