@@ -1,11 +1,11 @@
 version: "3.9"
 
-name: "compress-ai-prod"
+name: "brainycompress"
 
 services:
-  fe:
-    container_name: fe
-    image: react-prod:latest
+  frontend:
+    container_name: frontend
+    image: frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -14,11 +14,26 @@ services:
     ports:
       - "3000:80"
 
-  model:
-    container_name: model
-    image: flask:latest
+  model-server:
+    container_name: model-server
+    image: model-server:latest
     build:
       context: ./model-server
       dockerfile: Dockerfile
+    volumes:
+      - ./model-server/pretrained-model:/app/pretrained-model
+    ports:
+      - "50051:50051"
+
+  forwarder:
+    container_name: forwarder
+    image: forwarder:latest
+    build:
+      context: ./forwarder
+      dockerfile: Dockerfile
+    volumes:
+      - ./forwarder/config:/app/config
     ports:
       - "5000:5000"
+    depends_on:
+      - model-server
