@@ -18,7 +18,7 @@ services:
     container_name: model
     image: flask:latest
     build:
-      context: ./flask-model
+      context: ./model-server
       dockerfile: Dockerfile
     ports:
       - "5000:5000"

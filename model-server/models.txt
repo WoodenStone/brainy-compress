@@ -1,6 +1,7 @@
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-1-446d5c7f.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-3-5c6f152b.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-4-1ed4405a.pth.tar
+https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-5-866ba797.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-prior-6-9b02ea3a.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-ms-ssim-3-5352f123.pth.tar
 https://compressai.s3.amazonaws.com/models/v1/bmshj2018-factorized-ms-ssim-6-ee028763.pth.tar
