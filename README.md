@@ -3,14 +3,7 @@
 A web app built with React, Python, Golang for AI-powered image compression. Auto image compression based on critical image features and manual parameter settings are available. Features include batch compression and download, metrics and model comparison. Core algorithms are from [CompressAI](https://github.com/InterDigitalInc/CompressAI).
 
 
-## Set up with docker compose
-```sh
-# pull up client and server at one time with docker-compose in production mode
-docker-compose up -d
-```
-
-
-## Development
+## Set up
 
 Check README.md in each folder for more details.
 
@@ -19,6 +12,16 @@ UI: [README.md](./frontend/README.md)
 model server: [README.md](./model-server/README.md)
 
 forwarder layer: [README.md](./forwarder/README.md)
+
+
+## Set up with docker compose
+
+> Make sure all config files and pretrained models exist before start.
+
+```sh
+# pull up client and server at one time with docker-compose in production mode
+docker-compose up -d
+```
 
 
 ## Compile proto files
