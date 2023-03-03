@@ -1,11 +1,24 @@
 # README
 
 ## Start
+
+Add `config.yaml` inside `config` folder. Example config:
+```yaml
+ModelServer:
+  addr: xxx.xxx.xxx.xxx:xxxxx
+
+Http:
+  addr: x.x.x.x
+  port: xxxx
+```
+
+Then launch directly:
+
 ```sh
 go run ./cmd/server
 ```
 
-## Run in docker
+Or run in docker:
 ```sh
 # build
 docker build -t forwarder .
