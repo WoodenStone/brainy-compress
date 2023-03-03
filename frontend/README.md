@@ -8,6 +8,13 @@ The project is built with React, TypeScript, SCSS and MUI.
 
 ## Development
 
+Add `.env.development.local` file and set the environment variables:
+
+```text
+REACT_APP_PROXY_ENDPOINT="http://xxx:xxx" # address of forwarder server
+```
+
+
 ```sh
 # install dependencies
 npm i
