@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: 深度学习在线压缩平台 API 1.0.0
+  description: 深度学习在线压缩平台，使用深度学习方法进行图像压缩
+  version: 1.0.0
+servers:
+  - url: https://{{host}}/v1/
+tags:
+  - name: compress
+    description: 图像压缩
+paths:
+  /compress:
+    post:
+      tags:
+        - compress
+      summary: 指定模型压缩一张图片
+      requestBody:
+        description: 指定模型压缩一张图片
+        content:
+          application/multipart-formdata:
+            schema:
+              $ref: '#/components/schemas/Compress'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccResponse'
+        '400':
+          description: 参数错误
+  /auto-compress:
+    post:
+      tags:
+        - compress
+      summary: 自动图像识别压缩
+      requestBody:
+        description: 指定模型压缩一张图片
+        content:
+          application/multipart-formdata:
+            schema:
+              $ref: '#/components/schemas/AutoCompress'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccResponse'
+        '400':
+          description: 参数错误
+components:
+  responses:
+    SuccResponse:
+      description: 图像压缩成功
+      headers:
+        X-Metrics:
+          schema:
+            type: object
+          description: 压缩指标
+      content:
+        application/octect-stream:
+          schema:
+            type: string
+            format: binary
+  schemas:
+    Compress:
+      required:
+        - filename
+        - model
+        - filetype
+        - metric
+        - quality
+        - file
+      type: object
+      properties:
+        filename:
+          type: string
+          description: 文件名
+          example: image.jpeg
+        model:
+          type: string
+          description: 模型名称
+          enum:
+            - bmshj2018-factorized
+            - bmshj2018-hyperprior
+            - mbt2018-mean
+            - mbt2018
+            - cheng2020-anchor
+            - cheng2020-attn
+          example: bmshj2018-factorized
+        filetype:
+          type: string
+          description: 文件MIME类型
+          example: image/jpeg
+        metric:
+          type: string
+          description: 指标类型
+          enum:
+            - mse
+            - ms-ssim
+          example: mse
+        quality:
+          type: integer
+          format: int32
+          description: 图片压缩质量
+          example: 1
+        file:
+          type: object
+          description: 图像二进制
+    AutoCompress:
+      required:
+        - filename
+        - filetype
+        - metric
+        - quality
+        - file
+      type: object
+      properties:
+        filename:
+          type: string
+          description: 文件名
+          example: image.jpeg
+        filetype:
+          type: string
+          description: 文件MIME类型
+          example: image/jpeg
+        metric:
+          type: string
+          description: 指标类型
+          enum:
+            - mse
+            - ms-ssim
+          example: mse
+        quality:
+          type: string
+          enum:
+            - auto
+            - high
+            - medium
+            - low
+          description: 图片压缩质量
+          example: auto
+        file:
+          type: object
+          description: 图像二进制
