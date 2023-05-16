@@ -7,7 +7,6 @@ export function createDownloadLink(url: string, filename: string) {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  URL.revokeObjectURL(url)
 }
 
 // 保留指定位数的小数
