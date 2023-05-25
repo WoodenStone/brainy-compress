@@ -5,14 +5,14 @@ ADD . /app
 
 WORKDIR /app
 
-VOLUME [ "/data/models" ]
+VOLUME [ "/app/pretrained-model" ]
 
 ENV TORCH_HOME=/data/models
 
 RUN pip install -r requirements.txt
 
 # download all pretrained model before running the container
-RUN wget -i model.txt -P ${TORCH_HOME}/hub/checkpoints
+RUN wget -i models.txt -P ${TORCH_HOME}/hub/checkpoints
 
 ENV HOST_IP=0.0.0.0 PORT=50051
 
